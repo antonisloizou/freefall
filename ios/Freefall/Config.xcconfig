@@ -1,0 +1,4 @@
+// Replace with your hosted HTTPS API URL for a device/release build.
+// The slash substitution preserves URLs in xcconfig (// starts a comment).
+SLASH = /
+API_BASE_URL = http:$(SLASH)$(SLASH)localhost:8080

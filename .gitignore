@@ -1,0 +1,6 @@
+.DS_Store
+.build/
+DerivedData/
+xcuserdata/
+.env
+backend/freefall-api

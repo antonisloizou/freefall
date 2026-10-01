@@ -6,6 +6,18 @@
 
 ---
 
+## Implementation status
+
+The repository now includes an iPhone-first SwiftUI starter and a container-ready
+Go demo API. The first slice shows a synthetic jump, synchronized telemetry
+scrubbing, jump events, and an altitude chart. Cloud hosting, real GoPro ingestion,
+authentication, and media storage are still to be implemented.
+
+See [development instructions](docs/DEVELOPMENT.md) to run the app/backend and
+[architecture notes](docs/ARCHITECTURE.md) for the path to real footage and hosting.
+
+---
+
 # 1. Vision
 
 FREEFALL turns a skydive into a rich digital activity.
