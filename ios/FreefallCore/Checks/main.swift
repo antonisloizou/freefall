@@ -1,4 +1,5 @@
 import FreefallCore
+import Foundation
 
 func sample(_ t: Double, _ altitude: Double) -> TelemetrySample {
     .init(time: t, altitude: altitude, verticalSpeed: -50, speed3D: 52)
@@ -20,4 +21,22 @@ precondition(invalid.at(videoTime: .nan) == nil, "invalid replay time")
 precondition(invalid.at(videoTime: 2) == nil, "invalid sample")
 precondition(TelemetryEngine(samples: []).at(videoTime: 0) == nil, "empty source")
 
-print("Passed 10 telemetry checks: interpolation, offsets, gaps, ordering, duplicates, invalid values, empty sources.")
+let measured = TelemetryEngine(samples: [
+    .init(time: 0, altitude: 4_000, verticalSpeed: -40, speed3D: 42, gForce: 0.5,
+          acceleration: .init(x: 0, y: 1, z: 2), gravity: .init(x: 0, y: 1, z: 0)),
+    .init(time: 1, altitude: 3_950, verticalSpeed: -50, speed3D: 52, gForce: 1.5,
+          acceleration: .init(x: 2, y: 3, z: 4), gravity: .init(x: 0, y: 0, z: 1))
+])
+precondition(measured.at(videoTime: 0.5)?.gForce == 1.0, "G-force interpolation")
+precondition(measured.at(videoTime: 0.5)?.acceleration == .init(x: 1, y: 2, z: 3), "vector interpolation")
+
+print("Passed 12 telemetry checks, including synchronized vector interpolation.")
+
+if CommandLine.arguments.count > 1 {
+    let url = URL(fileURLWithPath: CommandLine.arguments[1])
+    let telemetry = try GPMFMotionExtractor().telemetry(videoURL: url, jumpID: "check")
+    precondition(telemetry?.samples.isEmpty == false, "expected GPMF accelerometer samples")
+    precondition(telemetry?.samples.first?.acceleration != nil, "expected acceleration vector")
+    precondition(telemetry?.samples.first?.gravity != nil, "expected gravity vector")
+    print("Extracted \(telemetry?.samples.count ?? 0) replay samples from \(url.lastPathComponent).")
+}

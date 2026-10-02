@@ -4,3 +4,4 @@ DerivedData/
 xcuserdata/
 .env
 backend/freefall-api
+test-media/

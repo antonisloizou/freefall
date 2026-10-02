@@ -6,7 +6,8 @@ let package = Package(
     platforms: [.iOS(.v17), .macOS(.v14)],
     products: [.library(name: "FreefallCore", targets: ["FreefallCore"])],
     targets: [
-        .target(name: "FreefallCore"),
+        .target(name: "CGPMF", publicHeadersPath: "include"),
+        .target(name: "FreefallCore", dependencies: ["CGPMF"]),
         .executableTarget(name: "FreefallCoreChecks", dependencies: ["FreefallCore"], path: "Checks")
     ]
 )

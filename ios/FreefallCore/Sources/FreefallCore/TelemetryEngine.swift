@@ -34,6 +34,28 @@ public struct TelemetryEngine: Sendable {
         guard gap > 0, gap <= maximumGap else { return nil }
         let fraction = (t - left.time) / gap
         func blend(_ a: Double, _ b: Double) -> Double { a + (b - a) * fraction }
-        return TelemetrySample(time: t, altitude: blend(left.altitude, right.altitude), verticalSpeed: blend(left.verticalSpeed, right.verticalSpeed), speed3D: blend(left.speed3D, right.speed3D))
+        let gForce: Double?
+        if let leftG = left.gForce, let rightG = right.gForce {
+            gForce = blend(leftG, rightG)
+        } else {
+            gForce = nil
+        }
+        func blendVector(_ left: MotionVector?, _ right: MotionVector?) -> MotionVector? {
+            guard let left, let right else { return nil }
+            return MotionVector(
+                x: blend(left.x, right.x),
+                y: blend(left.y, right.y),
+                z: blend(left.z, right.z)
+            )
+        }
+        return TelemetrySample(
+            time: t,
+            altitude: blend(left.altitude, right.altitude),
+            verticalSpeed: blend(left.verticalSpeed, right.verticalSpeed),
+            speed3D: blend(left.speed3D, right.speed3D),
+            gForce: gForce,
+            acceleration: blendVector(left.acceleration, right.acceleration),
+            gravity: blendVector(left.gravity, right.gravity)
+        )
     }
 }

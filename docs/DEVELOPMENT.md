@@ -34,10 +34,18 @@ Requires full Xcode with the iOS SDK, supporting Swift 6 and iOS 17 or later.
 2. Select the Freefall target and an iPhone simulator.
 3. Run the API on your Mac, then run the app.
 4. Open the demo jump and scrub or tap Exit, Deployment, and Landing.
+5. Tap the plus button to import a local MP4 or MOV from Photos or Files. The app
+   copies it into Application Support and creates a private draft that survives
+   relaunches. A fresh simulator has no local files; drag a video from Finder onto
+   the simulator first, then choose Import from Photos.
 
 The app displays synthetic altitude/speed and an altitude chart. When a jump has
 a video URL, AVPlayer supplies the replay clock for playback, pause, and seeking.
-The demo has no video and uses manual scrubbing.
+The demo has no video and uses manual scrubbing. Local imports extract GoPro GPMF
+accelerometer data on-device and display measured G-force. Until valid GPS is
+available, local speed and altitude are explicitly labeled estimates from a generic
+freefall model anchored at video start; they are not measurements and should not be
+used for logbook or safety decisions.
 
 For a physical phone, set `API_BASE_URL` in `ios/Freefall/Config.xcconfig` to a
 hosted HTTPS URL and select your Apple development team for signing. The default
